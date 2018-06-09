@@ -2,9 +2,6 @@
 const PluginError = require('plugin-error');
 const through = require('through2');
 const _ = require('lodash');
-const Buffer = require('safe-buffer').Buffer;
-
-const template = _.template;
 
 function compile(options, data, render) {
 	return through.obj(function (file, enc, cb) {
@@ -19,7 +16,7 @@ function compile(options, data, render) {
 		}
 
 		try {
-			const tpl = template(file.contents.toString(), options);
+			const tpl = _.template(file.contents.toString(), options);
 			file.contents = Buffer.from(render ? tpl(_.merge({}, file.data, data)) : tpl.toString());
 			this.push(file);
 		} catch (err) {
